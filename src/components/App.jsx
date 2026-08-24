@@ -12,15 +12,21 @@ function App() {
 
     const [searchResults, setSearchResults] = useState(sampleTracks);
     const [playlistTracks, setPlaylistTracks] = useState(sampleTracks);
-
     const [playlistName, setPlaylistName] = useState('My Playlist');
+
+    function addTrack(track) {
+        if (playlistTracks.find(savedTrack => savedTrack.id === track.id)) {
+            return;
+        }
+        setPlaylistTracks([...playlistTracks, track]);
+    };
 
     return (
         <div>
             <h1>Ja<span className="highlight">mmm</span>ing</h1>
             <SearchBar />
             <div className="App-playlist">
-                <SearchResults tracks={searchResults} />
+                <SearchResults tracks={searchResults} onAdd={addTrack} />
                 <Playlist name={playlistName} tracks={playlistTracks} />
             </div>
         </div>
