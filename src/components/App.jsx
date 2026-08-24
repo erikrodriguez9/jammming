@@ -5,9 +5,9 @@ import { useState } from 'react'
 
 function App() {
     const sampleTracks = [
-        { id: 1, name: 'Un Verano Sin Ti', artist: 'Bad Bunny', album: 'Un Verano Sin Ti' },
-        { id: 2, name: 'oh yeah?', artist: 'Steve Lacy', album: 'Oh yeah?' },
-        { id: 3, name: 'EVERYTHING HALLELUJAH', artist: 'Justin Bieber', album: 'SWAG II' }
+        { id: 1, name: 'Un Verano Sin Ti', artist: 'Bad Bunny', album: 'Un Verano Sin Ti', uri: 'spotify:track:1' },
+        { id: 2, name: 'oh yeah?', artist: 'Steve Lacy', album: 'Oh yeah?', uri: 'spotify:track:2' },
+        { id: 3, name: 'EVERYTHING HALLELUJAH', artist: 'Justin Bieber', album: 'SWAG II', uri: 'spotify:track:3' }
     ];
 
     const [searchResults, setSearchResults] = useState(sampleTracks);
@@ -25,13 +25,26 @@ function App() {
         setPlaylistTracks(playlistTracks.filter(savedTrack => savedTrack.id !== track.id));
     }
 
+    function updatePlaylistName(name) {
+        setPlaylistName(name);
+    }
+
+    function savePlaylist() {
+        const trackURIs = playlistTracks.map(track => track.uri);
+        console.log('Saving playlist:', playlistName, 'with tracks:', trackURIs);
+        // Logic to save the playlist to Spotify would go here
+
+        setPlaylistName('New Playlist');
+        setPlaylistTracks([]);
+    }
+
     return (
         <div>
             <h1>Ja<span className="highlight">mmm</span>ing</h1>
             <SearchBar />
             <div className="App-playlist">
                 <SearchResults tracks={searchResults} onAdd={addTrack} />
-                <Playlist name={playlistName} tracks={playlistTracks} onRemove={removeTrack} />
+                <Playlist name={playlistName} tracks={playlistTracks} onRemove={removeTrack} onNameChange={updatePlaylistName} onSave={savePlaylist} />
             </div>
         </div>
     );
