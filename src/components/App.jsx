@@ -21,13 +21,17 @@ function App() {
         setPlaylistTracks([...playlistTracks, track]);
     };
 
+    function removeTrack(track) {
+        setPlaylistTracks(playlistTracks.filter(savedTrack => savedTrack.id !== track.id));
+    }
+
     return (
         <div>
             <h1>Ja<span className="highlight">mmm</span>ing</h1>
             <SearchBar />
             <div className="App-playlist">
                 <SearchResults tracks={searchResults} onAdd={addTrack} />
-                <Playlist name={playlistName} tracks={playlistTracks} />
+                <Playlist name={playlistName} tracks={playlistTracks} onRemove={removeTrack} />
             </div>
         </div>
     );
