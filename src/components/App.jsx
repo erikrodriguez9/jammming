@@ -1,7 +1,8 @@
 import SearchBar from './SearchBar';
 import SearchResults from './SearchResults';
 import Playlist from './Playlist';
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import Spotify from '../util/Spotify';
 
 function App() {
     const sampleTracks = [
@@ -37,6 +38,12 @@ function App() {
         setPlaylistName('New Playlist');
         setPlaylistTracks([]);
     }
+
+    useEffect(() => {
+        Spotify.getAccessToken().then(token => {
+            console.log('Access token:', token);
+        });
+    }, []);
 
     return (
         <div>
