@@ -11,7 +11,9 @@ function App() {
     ];
 
     const [searchResults, setSearchResults] = useState(sampleTracks);
-    const [playlistTracks, setPlaylistTracks] = useState([]);
+    const [playlistTracks, setPlaylistTracks] = useState(sampleTracks);
+
+    const [playlistName, setPlaylistName] = useState('My Playlist');
 
     return (
         <div>
@@ -19,7 +21,7 @@ function App() {
             <SearchBar />
             <div className="App-playlist">
                 <SearchResults tracks={searchResults} />
-                <Playlist tracks={[]} />
+                <Playlist name={playlistName} tracks={playlistTracks} />
             </div>
         </div>
     );

@@ -1,10 +1,10 @@
 import Tracklist from './Tracklist';
 
-function Playlist({ tracks }) {
+function Playlist({ name, tracks }) {
     return (
         <div className="Playlist">
             <h2>Playlist</h2>
-            <input type="text" placeholder="New Playlist" />
+            <input type="text" value={name} readOnly />
             <Tracklist tracks={tracks} />
             <button>Save to Spotify</button>
         </div>
