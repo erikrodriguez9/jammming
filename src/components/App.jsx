@@ -39,16 +39,16 @@ function App() {
         setPlaylistTracks([]);
     }
 
-    useEffect(() => {
-        Spotify.getAccessToken().then(token => {
-            console.log('Access token:', token);
+    function search(term) {
+        Spotify.search(term).then(tracks => {
+            setSearchResults(tracks);
         });
-    }, []);
+    }
 
     return (
         <div>
             <h1>Ja<span className="highlight">mmm</span>ing</h1>
-            <SearchBar />
+            <SearchBar onSearch={search} />
             <div className="App-playlist">
                 <SearchResults tracks={searchResults} onAdd={addTrack} />
                 <Playlist name={playlistName} tracks={playlistTracks} onRemove={removeTrack} onNameChange={updatePlaylistName} onSave={savePlaylist} />
