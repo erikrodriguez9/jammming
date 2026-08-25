@@ -1,3 +1,4 @@
+import '../App.css';
 import SearchBar from './SearchBar';
 import SearchResults from './SearchResults';
 import Playlist from './Playlist';
@@ -12,7 +13,7 @@ function App() {
     ];
 
     const [searchResults, setSearchResults] = useState(sampleTracks);
-    const [playlistTracks, setPlaylistTracks] = useState(sampleTracks);
+    const [playlistTracks, setPlaylistTracks] = useState([]);
     const [playlistName, setPlaylistName] = useState('My Playlist');
     const [isSaving, setIsSaving] = useState(false);
 
@@ -57,7 +58,27 @@ function App() {
             window.localStorage.removeItem('pending_search_term');
             search(pendingTerm);
         }
-    }, [])
+    }, []);
+
+    useEffect(() => {
+        const savedName = window.localStorage.getItem('pending_playlist_name');
+        const savedTracks = window.localStorage.getItem('pending_playlist_tracks');
+
+        if (savedName) {
+            setPlaylistName(savedName);
+            window.localStorage.removeItem('pending_playlist_name');
+        }
+        if (savedTracks) {
+            setPlaylistTracks(JSON.parse(savedTracks));
+            window.localStorage.removeItem('pending_playlist_tracks');
+        }
+    }, []);
+
+    useEffect(() => {
+        window.localStorage.setItem('pending_playlist_name', playlistName);
+        window.localStorage.setItem('pending_playlist_tracks', JSON.stringify(playlistTracks));
+    }, [playlistName, playlistTracks]);
+
 
     return (
         <div>
