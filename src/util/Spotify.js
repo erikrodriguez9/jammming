@@ -1,5 +1,5 @@
 const clientId = '5fed87927b8b4f9286a2e33029858c34';
-const redirectUri = 'http://127.0.0.1:5173/';
+const redirectUri = 'https://myjammmingproject.netlify.app';
 const scope = 'playlist-modify-public playlist-modify-private';
 
 let accessToken;
