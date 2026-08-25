@@ -29,9 +29,13 @@ function base64encode(input) {
 }
 
 const Spotify = {
-  async redirectToAuthorize() {
+  async redirectToAuthorize(currentSearchTerm) {
     const codeVerifier = generateRandomString(64);
     window.localStorage.setItem('code_verifier', codeVerifier);
+
+    if (currentSearchTerm) {
+        window.localStorage.setItem('pending_search_term', currentSearchTerm);
+    }
 
     const hashed = await sha256(codeVerifier);
     const codeChallenge = base64encode(hashed);
@@ -50,7 +54,7 @@ const Spotify = {
     window.location = authUrl.toString();
   },
 
-  async getAccessToken() {
+  async getAccessToken(currentSearchTerm) {
     if (accessToken) {
       return accessToken;
     }
@@ -60,7 +64,7 @@ const Spotify = {
 
     if (!code) {
       // No code yet — send the user to Spotify to log in and authorize
-      await this.redirectToAuthorize();
+      await this.redirectToAuthorize(currentSearchTerm);
       return;
     }
 
@@ -89,7 +93,7 @@ const Spotify = {
   },
 
   async search(term) {
-    const token = await this.getAccessToken();
+    const token = await this.getAccessToken(term);
     const response = await fetch(
         `https://api.spotify.com/v1/search?type=track&q=${encodeURIComponent(term)}`,
         {

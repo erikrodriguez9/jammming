@@ -14,6 +14,7 @@ function App() {
     const [searchResults, setSearchResults] = useState(sampleTracks);
     const [playlistTracks, setPlaylistTracks] = useState(sampleTracks);
     const [playlistName, setPlaylistName] = useState('My Playlist');
+    const [isSaving, setIsSaving] = useState(false);
 
     function addTrack(track) {
         if (playlistTracks.find(savedTrack => savedTrack.id === track.id)) {
@@ -32,7 +33,9 @@ function App() {
 
     function savePlaylist() {
         const trackURIs = playlistTracks.map(track => track.uri);
+        setIsSaving(true);
         Spotify.savePlaylist(playlistName, trackURIs).then(() => {
+            setIsSaving(false);
             setPlaylistName('NewPlaylist');
             setPlaylistTracks([]);
         });
@@ -44,13 +47,25 @@ function App() {
         });
     }
 
+    const filteredResults = searchResults.filter(
+        track => !playlistTracks.some(savedTrack => savedTrack.id === track.id)
+    )
+
+    useEffect(() => {
+        const pendingTerm = window.localStorage.getItem('pending_search_term')
+        if (pendingTerm) {
+            window.localStorage.removeItem('pending_search_term');
+            search(pendingTerm);
+        }
+    }, [])
+
     return (
         <div>
             <h1>Ja<span className="highlight">mmm</span>ing</h1>
             <SearchBar onSearch={search} />
             <div className="App-playlist">
-                <SearchResults tracks={searchResults} onAdd={addTrack} />
-                <Playlist name={playlistName} tracks={playlistTracks} onRemove={removeTrack} onNameChange={updatePlaylistName} onSave={savePlaylist} />
+                <SearchResults tracks={filteredResults} onAdd={addTrack} />
+                <Playlist name={playlistName} tracks={playlistTracks} onRemove={removeTrack} onNameChange={updatePlaylistName} onSave={savePlaylist} isSaving={isSaving} />
             </div>
         </div>
     );
